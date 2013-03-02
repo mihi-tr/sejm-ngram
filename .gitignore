@@ -4,5 +4,8 @@
 *~
 *.sublime-*
 
+# python compiled files
+*.pyc
+
 # personal directories (too lazy to create branch right now)
 michal/
