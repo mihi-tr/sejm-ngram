@@ -1,0 +1,13 @@
+<h1>{{ search.text }}</h1>
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+<form action="/search/{{ search.text }}/go/" method="post">
+{% csrf_token %}
+{% for choice in search.choice_set.all %}
+    <input type="radio" name="search" id="search{{ forloop.counter }}" value="{{ search.id }}" />
+    <label for="search{{ forloop.counter }}">{{ search.text }}</label><br />
+    <label for="search{{ forloop.counter }}">{{ search.start_date }}</label><br />
+{% endfor %}
+<input type="submit" value="Vote" />
+</form>

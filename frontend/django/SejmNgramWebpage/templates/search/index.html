@@ -1,0 +1,16 @@
+{% extends "../templates/base.html" %}
+
+{% block page_title %}Main search page | {% endblock %}
+
+
+{% block page_content %}
+{% if latest_search_list %}
+    <ul>
+    {% for search in latest_search_list %}
+        <li><a href="/search/{{ search.text }}/">{{ search.text }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No searches are available.</p>
+{% endif %}
+{% endblock %}
