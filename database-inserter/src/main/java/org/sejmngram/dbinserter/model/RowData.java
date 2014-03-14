@@ -1,5 +1,6 @@
 package org.sejmngram.dbinserter.model;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -25,14 +26,19 @@ public class RowData {
 
 
     public static class Row {
-        private String blob;
+        private byte[] blob;
         private int nrEntries;
 
         public Row(){
-            this.blob = "";
         }
 
-        public String getBlob() { return this.blob;};
+        public byte[] getBlob() {
+        	if (blob == null)
+        		return null;
+        	byte[] result = new byte[blob.length];
+        	System.arraycopy(blob, 0, result, 0, blob.length);
+        	return result;
+        }
 
         public int getNrEntries() {
             return nrEntries;
@@ -42,8 +48,13 @@ public class RowData {
             nrEntries++;
         }
 
-        public void setBlob(String blob) {
-            this.blob = blob;
+        public void setBlob(byte[] blob) {
+        	if (blob == null) {
+        		this.blob = null;
+        		return;
+        	}
+        	this.blob = new byte[blob.length];
+        	System.arraycopy(blob, 0, this.blob, 0, blob.length);
         }
 
         public void setNrEntries(int nrEntries) {
@@ -70,7 +81,7 @@ public class RowData {
 
 
 
-     public void addEntryToBlob(long posixTimestamp, String posel, String partia, boolean randomizeIds) {
+     public void addEntryToBlob(long posixTimestamp, String posel, String partia, boolean randomizeIds) throws UnsupportedEncodingException {
         if ( getNrEntriesInLastBlob() == MAX_BLOB_ENTRIES){
             this.blobs.add( new Row());
         }
@@ -78,7 +89,12 @@ public class RowData {
 
 
 
-        StringBuffer sb = new StringBuffer( getLastBlob() );
+        StringBuffer sb = new StringBuffer();
+        String initString = "";
+        if (getLastBlob() != null) {
+        	initString = new String(getLastBlob(), "UTF-8");
+        }
+        sb.append(initString);
 
         if ( randomizeIds ){
             // THIS IS FOR TESTING ONLY
@@ -100,14 +116,14 @@ public class RowData {
 
 
         getLastRow().inreaseNrEntries();
-        getLastRow().setBlob( sb.toString());
+        getLastRow().setBlob( sb.toString().getBytes("UTF-8"));
     }
 
     public ArrayList<Row> getAllRows(){
         return  this.blobs;
     }
 
-    public String getLastBlob() {
+    public byte[] getLastBlob() {
         return getLastRow().getBlob();
     }
 

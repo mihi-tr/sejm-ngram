@@ -2,6 +2,9 @@ package org.sejmngram.dbinserter.db;
 
 import org.sejmngram.dbinserter.model.RowData;
 
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -16,8 +19,8 @@ public class DatabaseRepo {
 
     private  static String db_host = "localhost";
     private static String db_base = "sejmngram";
-    private static String db_user = "root";
-    private static String db_pass = "";
+    private static String db_user = "db-inserter";
+    private static String db_pass = "sejmngram";
 
     Connection c;
 
@@ -48,7 +51,7 @@ public class DatabaseRepo {
                     stmt.setDate( 2, new java.sql.Date( rowData.getDateTo().getTime() ));
                     stmt.setString( 3, ngram );
                     stmt.setInt( 4, row.getNrEntries());
-                    stmt.setString( 5, row.getBlob() );
+                    stmt.setBytes( 5, row.getBlob() );
 
                     //create table
                     int result =  stmt.executeUpdate();

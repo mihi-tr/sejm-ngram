@@ -93,7 +93,7 @@ public class BlobCreator {
         for ( String key :  blobsMap.keySet() ){
             RowData d = blobsMap.get( key );
 
-            blobBytes += Toolkit.getStringSizeInBytes(d.getLastBlob());
+            blobBytes += d.getLastBlob().length;
 
             int keySize = blobsMap.get( key ).getNrAllEntries();
             entriesSizes.add( keySize );
